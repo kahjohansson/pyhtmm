@@ -9,12 +9,11 @@ word_index = {} #string: int
 index_word = {} #int: string
 index = 0
 
-def process_json(json_filename):
-    product = json.load(open(json_filename))
+def process_file(filename):
+    file = open(filename)
     docs = []
-    for review in product['Reviews']:
-        if review['Content'] != None:
-            docs.append(process(review['Content']))
+    for line in file:
+        docs.append(process(line))
     return docs
 
 def process(txt):
@@ -51,6 +50,6 @@ def read_train_documents(data_dir):
     print("Loading all train documents...")
 
     for filename in tqdm(os.listdir(data_dir)):
-        docs += process_json(data_dir+filename)
+        docs += process_file(data_dir+filename)
 
     return docs, word_index, index_word

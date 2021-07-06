@@ -9,12 +9,12 @@ from nltk.corpus import stopwords
 import re, pickle
 import locale, sys, datetime, time, os
 
-stopword_list = stopwords.words('english')
+stopword_list = stopwords.words('portuguese')
 punctuation_list = ['-', '(', ')', ':', '}', '{', '\'', '\'\'', '\"', '\"\"']
 sid = SentimentIntensityAnalyzer()
 # word_tokenize = TreebankWordTokenizer().tokenize
 # word_tokenize = CoreNLPParser(options={"americanize": True, "ptb3Escaping": True, "splitHyphenated": False}).tokenize
-ss = SnowballStemmer('english')
+ss = SnowballStemmer('portuguese')
 url_regex = re.compile('(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?')
 
 def clean_up(raw_sentence):

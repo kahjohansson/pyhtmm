@@ -1,4 +1,4 @@
-import json, os
+import json, os, jsonlines
 from tqdm import tqdm
 
 from .utils import *
@@ -9,12 +9,19 @@ word_index = {} #string: int
 index_word = {} #int: string
 index = 0
 
-def process_file(filename):
+def process_plain_text(filename):
     file = open(filename)
     docs = []
     for line in file:
         docs.append(process(line))
     return docs
+
+def process_jsonlines(filename, data_field):
+    with jsonlines.open(filename, 'r') as reader:
+        docs = []
+        for doc in reader:
+            docs.append(process(doc[data_field]))
+        return docs
 
 def process(txt):
     global index
@@ -45,11 +52,17 @@ def process_doc(txt, word2index):
     return doc
 
 
-def read_train_documents(data_dir):
+def read_train_documents(data_dir, file_type='plain_text', data_field=None):
     docs = []
     print("Loading all train documents...")
 
+    function_name = ''
+    if file_type == 'plain_text':
+        function_name = 'process_plain_text(data_dir+filename)'
+    elif file_type == 'jsonlines':
+        function_name = 'process_jsonlines(data_dir+filename, data_field)'
+
     for filename in tqdm(os.listdir(data_dir)):
-        docs += process_file(data_dir+filename)
+        docs += eval(function_name)
 
     return docs, word_index, index_word
